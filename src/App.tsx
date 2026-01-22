@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.css'
-
-type User = {
-  id: number;
-  username: string;
-  email: string;
-}
+import { Login } from './components/login';
+import { UsersContext } from './contexts/users-context';
+import { UserContext } from './contexts/user-context';
 
 const App = () =>{
+  const {currentUser, setCurrentUser} = useContext(UserContext);
   const [greeting, setGreeting] = useState<string>('');
-  const [users, setUsers] = useState<User[]>([]);
+  const {setUsers} = useContext(UsersContext);
 
   useEffect(() => {
     const getGreeting = async () => {
@@ -30,7 +28,13 @@ const App = () =>{
 
   return (
     <>
+      { !currentUser && <Login /> }
+      { currentUser && (<>
+      <div className="top-right">
+        <button onClick={() => { setCurrentUser(null) }}>Logout</button>
+      </div>
       <h1>Fernando's Todo App</h1>
+      
       <div className="card">
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
@@ -38,19 +42,7 @@ const App = () =>{
         <p>
           Here you can see the server response to the route / with the action GET <code>{greeting}</code>
         </p>
-        <div className="card">
-          <p>
-            Here you can see the server response to requesting the route /users with the action GET
-          </p>
-          <ul>
-            {users.map(user => (<li key={user.id}>
-              <p>ID: {user.id}</p>
-              <p>User Name: {user.username}</p>
-              <p>Email: {user.email}</p>
-            </li>))}
-          </ul>
-        </div>
-      </div>
+      </div></>)}
     </>
   )
 }
