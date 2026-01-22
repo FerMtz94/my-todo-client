@@ -33,7 +33,7 @@ export const Login: React.FC<{}> = () => {
 
     return (
         <>
-            <h1>Welcome to My Todo App</h1>
+            <h1>My Todo App</h1>
             <div className="form-container">
                 <form>
                     <input type="text" placeholder="email" value={formInput.email} onClick={() => setError('')} onChange={(e) => setFormInput({...formInput, email: e.target.value})}/>
