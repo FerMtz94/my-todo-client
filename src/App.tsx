@@ -1,13 +1,14 @@
 import { useContext, useEffect } from "react";
 import "./App.css";
 import { Login } from "./components/login";
+import { TaskList } from "./components/task-list";
 import { TaskContext } from "./contexts/tasks-context";
 import { UserContext } from "./contexts/user-context";
 import { UsersContext } from "./contexts/users-context";
 
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
-	const { tasks, setTasks } = useContext(TaskContext);
+	const { setTasks } = useContext(TaskContext);
 	const { setUsers } = useContext(UsersContext);
 
 	useEffect(() => {
@@ -54,25 +55,7 @@ const App = () => {
 						</button>
 					</div>
 					<h1>{currentUser.username} Todo Items</h1>
-					<div className="card">
-						{!tasks && <p>No tasks found.</p>}
-						{tasks && tasks.length === 0 && (
-							<p>No tasks available. Add a new task!</p>
-						)}
-						{tasks &&
-							tasks.length > 0 &&
-							tasks.map((task) => (
-								<div key={task.id}>
-									<h3>{task.title}</h3>
-									<p>{task.description}</p>
-									<p>
-										Due Date: {new Date(task.due_date).toLocaleDateString()}
-									</p>
-									<p>Status: {task.is_completed ? "Completed" : "Pending"}</p>
-									<hr />
-								</div>
-							))}
-					</div>
+					<TaskList />
 				</>
 			)}
 		</>
