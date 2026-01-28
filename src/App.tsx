@@ -54,8 +54,10 @@ const App = () => {
 							Logout
 						</button>
 					</div>
-					<h1>{currentUser.username} Todo Items</h1>
-					<TaskList />
+					<div className="main-container">
+						<h1>{currentUser.username} Todo Items</h1>
+						<TaskList />
+					</div>
 				</>
 			)}
 		</>

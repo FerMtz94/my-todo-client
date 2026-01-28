@@ -101,7 +101,7 @@ export const Login: React.FC<{}> = () => {
 					<span style={{ color: "red" }}>{error}</span>
 				</form>
 			</div>
-			<section>
+			<section id="users-list">
 				<h4>Users list (for dev purposes)</h4>
 				<div className="user-cards-container">
 					{users?.map((user) => (
