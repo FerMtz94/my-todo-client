@@ -1,3 +1,4 @@
+import { ChakraProvider as ChakraUIProvider } from "@chakra-ui/provider";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
@@ -8,12 +9,14 @@ import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<UsersProvider>
-			<UserProvider>
-				<TaskProvider>
-					<App />
-				</TaskProvider>
-			</UserProvider>
-		</UsersProvider>
+		<ChakraUIProvider>
+			<UsersProvider>
+				<UserProvider>
+					<TaskProvider>
+						<App />
+					</TaskProvider>
+				</UserProvider>
+			</UsersProvider>
+		</ChakraUIProvider>
 	</StrictMode>,
 );
