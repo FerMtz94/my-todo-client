@@ -7,7 +7,7 @@ interface DialogProps {
 	content?: React.ReactNode;
 }
 
-export const TaskModal = createOverlay<DialogProps>((props) => {
+export const dialog = createOverlay<DialogProps>((props) => {
 	const { title, description, content, ...rest } = props;
 	return (
 		<Dialog.Root {...rest}>

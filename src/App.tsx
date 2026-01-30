@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { TaskModal } from "./components/task-modal";
+import { dialog } from "./components/task-modal";
 import "./App.css";
 import { Login } from "./components/login";
 import { TaskList } from "./components/task-list";
@@ -41,7 +41,7 @@ const App = () => {
 	}, [currentUser, setTasks]);
 
 	const addTask = () => {
-		TaskModal.open("a", {
+		dialog.open("a", {
 			title: "Dialog Title",
 			description: "Dialog Description",
 		});
@@ -73,7 +73,7 @@ const App = () => {
 							+
 						</button>
 						<TaskList />
-						<TaskModal.Viewport />
+						<dialog.Viewport />
 					</div>
 				</>
 			)}
