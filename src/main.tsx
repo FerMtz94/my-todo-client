@@ -1,6 +1,6 @@
-import { ChakraProvider as ChakraUIProvider } from "@chakra-ui/provider";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Provider as ChakraUIProvider } from "@/components/ui/provider";
 import App from "./App.tsx";
 import { TaskProvider } from "./contexts/tasks-context.tsx";
 import { UserProvider } from "./contexts/user-context.tsx";
