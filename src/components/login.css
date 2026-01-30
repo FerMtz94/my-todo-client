@@ -1,3 +1,9 @@
+.app-container {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
 .form-container {
 	display: flex;
 	flex-direction: row;
@@ -5,11 +11,10 @@
 	align-items: center;
 }
 
-.user-cards-container {
-	display: flex;
-	flex-direction: row;
-	gap: 10px;
-	justify-content: center;
+h1 {
+	font-size: 3.2em;
+	line-height: 1.1;
+	margin: 0.5em;
 }
 
 form {
@@ -23,9 +28,12 @@ form input {
 	margin-bottom: 15px;
 	padding: 10px;
 	font-size: 16px;
+	border-radius: 5px;
+	color: black;
 }
 
-section#users-list {
-	display: flex;
-	flex-direction: column;
+form button {
+	padding: 12px;
+	background: transparent;
+	border: 1px solid #eee;
 }

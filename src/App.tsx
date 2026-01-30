@@ -1,4 +1,5 @@
 import { useContext, useEffect } from "react";
+import { TaskModal } from "./components/task-modal";
 import "./App.css";
 import { Login } from "./components/login";
 import { TaskList } from "./components/task-list";
@@ -39,6 +40,13 @@ const App = () => {
 		}
 	}, [currentUser, setTasks]);
 
+	const addTask = () => {
+		TaskModal.open("a", {
+			title: "Dialog Title",
+			description: "Dialog Description",
+		});
+	};
+
 	return (
 		<>
 			{!currentUser && <Login />}
@@ -56,7 +64,15 @@ const App = () => {
 					</div>
 					<div className="main-container">
 						<h1>{currentUser.username} Todo Items</h1>
+						<button
+							id="add-task-button"
+							type="button"
+							onClick={() => addTask()}
+						>
+							+
+						</button>
 						<TaskList />
+						<TaskModal.Viewport />
 					</div>
 				</>
 			)}
