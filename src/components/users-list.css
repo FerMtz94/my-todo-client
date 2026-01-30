@@ -1,0 +1,11 @@
+section#users-list {
+	display: flex;
+	flex-direction: column;
+}
+
+.user-cards-container {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	justify-content: center;
+}

@@ -2,8 +2,8 @@ import type React from "react";
 import { useContext, useRef, useState } from "react";
 import { UserContext } from "../contexts/user-context";
 import { UsersContext } from "../contexts/users-context";
-import { UserCard } from "./user-card";
 import "./login.css";
+import { UsersList } from "./users-list";
 
 export const Login: React.FC<{}> = () => {
 	const [error, setError] = useState<string>("");
@@ -76,13 +76,13 @@ export const Login: React.FC<{}> = () => {
 	};
 
 	return (
-		<>
+		<div className="app-container">
 			<h1>My Todo App</h1>
 			<div className="form-container">
 				<form action={validateCredentials} onInput={removeErrorMsg}>
 					<input
 						type="text"
-						placeholder="email"
+						placeholder="Email"
 						name="email"
 						onBlur={validateEmail}
 						onInput={handleEmailInput}
@@ -101,14 +101,7 @@ export const Login: React.FC<{}> = () => {
 					<span style={{ color: "red" }}>{error}</span>
 				</form>
 			</div>
-			<section id="users-list">
-				<h4>Users list (for dev purposes)</h4>
-				<div className="user-cards-container">
-					{users?.map((user) => (
-						<UserCard key={user.id} user={user} />
-					))}
-				</div>
-			</section>
-		</>
+			<UsersList />
+		</div>
 	);
 };
