@@ -55,6 +55,7 @@ const App = () => {
 					<div className="top-right">
 						<button
 							type="button"
+							className="outline-button"
 							onClick={() => {
 								setCurrentUser(null);
 							}}

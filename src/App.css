@@ -8,10 +8,12 @@
 
 #add-task-button {
 	display: flex;
+	padding: 0px 12px 6px 12px;
+	border: 1px solid #eee;
 	justify-content: center;
 	align-items: center;
 	cursor: pointer;
-	font-size: 1.2em;
+	font-size: 1.5em;
 }
 
 .main-container {
@@ -26,6 +28,11 @@
 	position: absolute;
 	top: 1em;
 	right: 1em;
+}
+
+.top-right button {
+	border: 1px solid #eee;
+	padding: 12px;
 }
 
 .logo {
