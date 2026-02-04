@@ -1,49 +1,69 @@
 import { useContext, useEffect } from "react";
 import { dialog } from "./components/task-modal";
 import "./App.css";
+import { TaskService } from "./api/task-service";
 import { Login } from "./components/login";
 import { TaskList } from "./components/task-list";
 import { TaskContext } from "./contexts/tasks-context";
 import { UserContext } from "./contexts/user-context";
-import { UsersContext } from "./contexts/users-context";
+import type { Task } from "./types/task";
 
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
 	const { setTasks } = useContext(TaskContext);
-	const { setUsers } = useContext(UsersContext);
-
-	useEffect(() => {
-		const getUsers = async () => {
-			const response = await fetch(
-				"https://my-todo-app-neon-five.vercel.app/users",
-			);
-			const data = await response.json();
-			setUsers(data);
-		};
-
-		getUsers();
-	}, [setUsers]);
+	const taskService = new TaskService();
 
 	useEffect(() => {
 		if (currentUser) {
 			document.title = `My Todos - ${currentUser.username}`;
 			const getTodos = async () => {
-				const response = await fetch(
-					`https://my-todo-app-neon-five.vercel.app/users/${currentUser.id}/tasks`,
+				await setTasks(
+					(await taskService.getTasksByUserId(currentUser.id)) || [],
 				);
-				const data = await response.json();
-				console.log("response", response);
-				console.log("Fetched tasks:", data);
-				setTasks(data);
 			};
 			getTodos();
 		}
-	}, [currentUser, setTasks]);
+	}, [currentUser, setTasks, taskService]);
+
+	const postTask = async (formData: FormData) => {
+		const formValues = Object.fromEntries(formData.entries());
+		const { title, description } = formValues as {
+			title: string;
+			description: string;
+		};
+
+		if (!currentUser) {
+			return;
+		}
+		if (!title) {
+			return;
+		}
+
+		const createdTask = await taskService.createTask({
+			user_id: currentUser.id,
+			title,
+			description,
+		} as Partial<Task>);
+
+		if (createdTask) {
+			setTasks((prev) => (prev ? [...prev, createdTask] : [createdTask]));
+		}
+	};
 
 	const addTask = () => {
 		dialog.open("a", {
-			title: "Dialog Title",
-			description: "Dialog Description",
+			title: "Add a new task",
+			content: (
+				<form action={postTask}>
+					<label htmlFor="task-title">Title</label>
+					<input id="task-title" type="text" name="title" />
+
+					<label htmlFor="task-description">Description</label>
+					<input id="task-description" type="text" name="description" />
+
+					<button type="submit">Add</button>
+				</form>
+			),
 		});
 	};
 
