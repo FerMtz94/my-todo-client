@@ -47,7 +47,7 @@ export class TaskService {
 		}
 	}
 
-	public async createTask(task: Partial<Task>): Promise<boolean> {
+	public async createTask(task: Partial<Task>): Promise<Task | undefined> {
 		try {
 			const response = await fetch(`${this.baseUrl}/tasks`, {
 				method: "POST",
@@ -59,10 +59,10 @@ export class TaskService {
 			if (response.status !== 201) {
 				throw new Error(`Failed to create task: ${response.statusText}`);
 			}
-			return true;
+			return response.json();
 		} catch (error) {
 			console.error(error);
-			return false;
+			return undefined;
 		}
 	}
 
