@@ -39,14 +39,16 @@ const App = () => {
 			return;
 		}
 
-		const createdTask = await taskService.createTask({
+		const createdTask = await taskService.createUserTask({
 			user_id: currentUser.id,
 			title,
 			description,
 		} as Partial<Task>);
 
 		if (createdTask) {
-			setTasks((prev) => (prev ? [...prev, createdTask] : [createdTask]));
+			setTasks((prev) =>
+				prev ? [...prev, { ...createdTask } as Task] : [createdTask],
+			);
 		}
 	};
 
