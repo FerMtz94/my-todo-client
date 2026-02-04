@@ -47,15 +47,18 @@ export class TaskService {
 		}
 	}
 
-	public async createTask(task: Partial<Task>): Promise<Task | undefined> {
+	public async createUserTask(task: Partial<Task>): Promise<Task | undefined> {
 		try {
-			const response = await fetch(`${this.baseUrl}/tasks`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+			const response = await fetch(
+				`${this.baseUrl}/users/${task.user_id}/tasks`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(task),
 				},
-				body: JSON.stringify(task),
-			});
+			);
 			if (response.status !== 201) {
 				throw new Error(`Failed to create task: ${response.statusText}`);
 			}
