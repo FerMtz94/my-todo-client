@@ -45,15 +45,20 @@ const App = () => {
 			description,
 		} as Partial<Task>);
 
-		if (createdTask) {
-			setTasks((prev) =>
-				prev ? [...prev, { ...createdTask } as Task] : [createdTask],
+		if (createdTask?.task_id) {
+			const newTask = await taskService.getUserTaskById(
+				currentUser.id,
+				createdTask.task_id,
 			);
+			if (newTask) {
+				setTasks((prev) => (prev ? [...prev, newTask] : [newTask]));
+			}
+			dialog.close("add-task-dialog");
 		}
 	};
 
 	const addTask = () => {
-		dialog.open("a", {
+		dialog.open("add-task-dialog", {
 			title: "Add a new task",
 			content: (
 				<form action={postTask}>

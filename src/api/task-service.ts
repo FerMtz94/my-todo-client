@@ -33,6 +33,25 @@ export class TaskService {
 		}
 	}
 
+	public async getUserTaskById(
+		userId: number,
+		taskId: number,
+	): Promise<Task | undefined> {
+		try {
+			const response = await fetch(
+				`${this.baseUrl}/users/${userId}/tasks/${taskId}`,
+			);
+			if (response.status !== 200) {
+				throw new Error(
+					`Failed to fetch task with ID ${taskId}: ${response.statusText}`,
+				);
+			}
+			return (await response.json()) as Task;
+		} catch (error) {
+			console.error(error);
+		}
+	}
+
 	public async getTasksByUserId(userId: number): Promise<Task[] | undefined> {
 		try {
 			const response = await fetch(`${this.baseUrl}/users/${userId}/tasks`);
@@ -47,7 +66,9 @@ export class TaskService {
 		}
 	}
 
-	public async createUserTask(task: Partial<Task>): Promise<Task | undefined> {
+	public async createUserTask(
+		task: Partial<Task>,
+	): Promise<{ task_id: number } | undefined> {
 		try {
 			const response = await fetch(
 				`${this.baseUrl}/users/${task.user_id}/tasks`,
