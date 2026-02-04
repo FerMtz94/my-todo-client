@@ -12,6 +12,7 @@
 
 h2 {
 	margin: 0 0.5em 0.5em 0.5em;
+	font-size: larger;
 }
 
 section {
@@ -21,6 +22,18 @@ section {
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: 1em;
+}
+
+.task-card-header {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: flex-end;
+}
+
+.task-card-selected {
+	width: 24px;
+	height: 24px;
 }
 
 .task-card-row {

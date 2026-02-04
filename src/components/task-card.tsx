@@ -1,14 +1,25 @@
 import type React from "react";
 import type { Task } from "../types/task";
 import "./task-styles.css";
+import { useState } from "react";
 
 interface TaskCardProps {
 	task: Task;
 }
 
 export const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+	const [checked, setChecked] = useState(false);
+
 	return (
 		<div className="task-card">
+			<div className="task-card-header">
+				<input
+					type="checkbox"
+					checked={checked}
+					className="task-card-selected"
+					onChange={() => setChecked(!checked)}
+				/>
+			</div>
 			<h2>{task.title}</h2>
 			<div className="task-card-row">
 				<div className="task-card-column">
