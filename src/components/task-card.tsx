@@ -1,18 +1,36 @@
 import type React from "react";
 import type { Task } from "../types/task";
 import "./task-styles.css";
-import { useState } from "react";
+import { Icon } from "@chakra-ui/react/icon";
+import { useEffect, useState } from "react";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 interface TaskCardProps {
 	task: Task;
+	setSelectedTasks: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-export const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+export const TaskCard: React.FC<TaskCardProps> = ({
+	task,
+	setSelectedTasks,
+}) => {
 	const [checked, setChecked] = useState(false);
+
+	useEffect(() => {
+		setSelectedTasks((prev) => {
+			if (checked) {
+				return [...prev, task.id];
+			}
+			return prev.filter((taskId) => taskId !== task.id);
+		});
+	}, [checked, setSelectedTasks, task]);
 
 	return (
 		<div className="task-card">
 			<div className="task-card-header">
+				<Icon>
+					<FaRegTrashCan />
+				</Icon>
 				<input
 					type="checkbox"
 					checked={checked}
