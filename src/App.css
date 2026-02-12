@@ -17,7 +17,15 @@
 }
 
 .dialog {
-	background-color: #ddd;
+	color: rgba(255, 255, 255, 0.87);
+	background-color: #242424;
+}
+
+@media (prefers-color-scheme: light) {
+	.dialog {
+		color: #213547;
+		background-color: #bbb;
+	}
 }
 
 .main-container {
