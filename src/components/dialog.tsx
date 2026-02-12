@@ -1,11 +1,5 @@
 import { createOverlay, Dialog, Portal } from "@chakra-ui/react";
-import type React from "react";
-
-interface DialogProps {
-	title: string;
-	description?: string;
-	content?: React.ReactNode;
-}
+import type { DialogProps } from "@/types/dialog-props";
 
 export const dialog = createOverlay<DialogProps>((props) => {
 	const { title, description, content, ...rest } = props;
@@ -14,7 +8,7 @@ export const dialog = createOverlay<DialogProps>((props) => {
 			<Portal>
 				<Dialog.Backdrop />
 				<Dialog.Positioner>
-					<Dialog.Content>
+					<Dialog.Content className="dialog">
 						{title && (
 							<Dialog.Header>
 								<Dialog.Title>{title}</Dialog.Title>
