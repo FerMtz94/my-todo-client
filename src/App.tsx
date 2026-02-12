@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { dialog } from "./components/task-modal";
+import { dialog } from "./components/dialog";
 import "./App.css";
 import { TaskService } from "./api/task-service";
 import { Login } from "./components/login";
@@ -60,6 +60,7 @@ const App = () => {
 	const addTask = () => {
 		dialog.open("add-task-dialog", {
 			title: "Add a new task",
+			placement: "center",
 			content: (
 				<form action={postTask}>
 					<label htmlFor="task-title">Title</label>
