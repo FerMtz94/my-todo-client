@@ -2,9 +2,11 @@ import type React from "react";
 import type { Task } from "../types/task";
 import "./task-styles.css";
 import { Icon } from "@chakra-ui/react/icon";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { TaskServiceInstance as taskService } from "@/api/task-service";
 import { dialog } from "@/components/dialog";
+import { TaskContext } from "@/contexts/tasks-context";
 
 interface TaskCardProps {
 	task: Task;
@@ -16,6 +18,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 	setSelectedTasks,
 }) => {
 	const [checked, setChecked] = useState(false);
+	const { setTasks } = useContext(TaskContext);
 
 	useEffect(() => {
 		setSelectedTasks((prev) => {
@@ -25,6 +28,19 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 			return prev.filter((taskId) => taskId !== task.id);
 		});
 	}, [checked, setSelectedTasks, task]);
+
+	const handleTaskDeletion = async (taskId: number) => {
+		const deleted = await taskService.deleteTask(taskId);
+		if (deleted) {
+			setTasks(
+				(prev) =>
+					prev?.filter((currentTask) => currentTask.id !== taskId) || null,
+			);
+			dialog.close("delete-dialog");
+		} else {
+			alert("Failed to delete task. Please try again.");
+		}
+	};
 
 	const openDeleteConfirmation = () => {
 		dialog.open("delete-dialog", {
@@ -38,7 +54,9 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 						justifyContent: "center",
 					}}
 				>
-					<button type="button">Yes</button>
+					<button type="button" onClick={() => handleTaskDeletion(task.id)}>
+						Yes
+					</button>
 					<button type="button" onClick={() => dialog.close("delete-dialog")}>
 						No
 					</button>
