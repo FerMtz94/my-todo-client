@@ -16,6 +16,10 @@
 	font-size: 1.5em;
 }
 
+.dialog {
+	background-color: #ddd;
+}
+
 .main-container {
 	display: flex;
 	flex-direction: column;
