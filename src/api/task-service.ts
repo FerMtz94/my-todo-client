@@ -127,3 +127,5 @@ export class TaskService {
 		}
 	}
 }
+
+export const TaskServiceInstance = new TaskService();

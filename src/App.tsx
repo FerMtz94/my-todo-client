@@ -1,7 +1,7 @@
 import { useContext, useEffect } from "react";
 import { dialog } from "./components/dialog";
 import "./App.css";
-import { TaskService } from "./api/task-service";
+import { TaskServiceInstance as taskService } from "./api/task-service";
 import { Login } from "./components/login";
 import { TaskList } from "./components/task-list";
 import { TaskContext } from "./contexts/tasks-context";
@@ -11,7 +11,6 @@ import type { Task } from "./types/task";
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
 	const { setTasks } = useContext(TaskContext);
-	const taskService = new TaskService();
 
 	useEffect(() => {
 		if (currentUser) {
@@ -23,7 +22,7 @@ const App = () => {
 			};
 			getTodos();
 		}
-	}, [currentUser, setTasks, taskService]);
+	}, [currentUser, setTasks]);
 
 	const postTask = async (formData: FormData) => {
 		const formValues = Object.fromEntries(formData.entries());
