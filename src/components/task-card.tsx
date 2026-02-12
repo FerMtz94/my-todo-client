@@ -4,6 +4,7 @@ import "./task-styles.css";
 import { Icon } from "@chakra-ui/react/icon";
 import { useEffect, useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+import { dialog } from "@/components/dialog";
 
 interface TaskCardProps {
 	task: Task;
@@ -25,10 +26,35 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 		});
 	}, [checked, setSelectedTasks, task]);
 
+	const openDeleteConfirmation = () => {
+		dialog.open("delete-dialog", {
+			title: "Are you sure you want to delete this task?",
+			placement: "center",
+			content: (
+				<div
+					style={{
+						display: "flex",
+						gap: "1rem",
+						justifyContent: "center",
+					}}
+				>
+					<button type="button">Yes</button>
+					<button type="button" onClick={() => dialog.close("delete-dialog")}>
+						No
+					</button>
+				</div>
+			),
+		});
+	};
+
 	return (
 		<div className="task-card">
 			<div className="task-card-header">
-				<Icon>
+				<Icon
+					onClick={openDeleteConfirmation}
+					cursor="pointer"
+					className="dialog"
+				>
 					<FaRegTrashCan />
 				</Icon>
 				<input
