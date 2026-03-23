@@ -1,12 +1,14 @@
 import { useContext, useEffect } from "react";
 import { dialog } from "./components/dialog";
 import "./App.css";
+import { Toaster } from "react-hot-toast";
 import { TaskServiceInstance as taskService } from "./api/task-service";
 import { Login } from "./components/login";
 import { TaskList } from "./components/task-list";
 import { TaskContext } from "./contexts/tasks-context";
 import { UserContext } from "./contexts/user-context";
 import type { Task } from "./types/task";
+import type { User } from "./types/user";
 
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -21,8 +23,21 @@ const App = () => {
 				);
 			};
 			getTodos();
+		} else if (sessionStorage.getItem("current-user")) {
+			const sessionStoredCurrentUser = JSON.parse(
+				sessionStorage.getItem("current-user")!,
+			) as User;
+			setCurrentUser(sessionStoredCurrentUser);
+			document.title = `My Todos - ${sessionStoredCurrentUser?.username}`;
+			const getTodos = async () => {
+				await setTasks(
+					(await taskService.getTasksByUserId(sessionStoredCurrentUser.id)) ||
+						[],
+				);
+			};
+			getTodos();
 		}
-	}, [currentUser, setTasks]);
+	}, [currentUser, setTasks, setCurrentUser]);
 
 	const postTask = async (formData: FormData) => {
 		const formValues = Object.fromEntries(formData.entries());
@@ -44,13 +59,13 @@ const App = () => {
 			description,
 		} as Partial<Task>);
 
-		if (createdTask?.task_id) {
+		if (createdTask) {
 			const newTask = await taskService.getUserTaskById(
 				currentUser.id,
-				createdTask.task_id,
+				createdTask.id,
 			);
 			if (newTask) {
-				setTasks((prev) => (prev ? [...prev, newTask] : [newTask]));
+				setTasks((prev) => (prev ? [newTask, ...prev] : [newTask]));
 			}
 			dialog.close("add-task-dialog");
 		}
@@ -76,6 +91,7 @@ const App = () => {
 
 	return (
 		<>
+			<Toaster position={"bottom-center"} />
 			{!currentUser && <Login />}
 			{currentUser && (
 				<>
@@ -85,6 +101,7 @@ const App = () => {
 							className="outline-button"
 							onClick={() => {
 								setCurrentUser(null);
+								sessionStorage.removeItem("current-user");
 							}}
 						>
 							Logout
