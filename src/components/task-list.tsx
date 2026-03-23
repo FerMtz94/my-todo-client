@@ -1,15 +1,15 @@
 import type React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { TaskContext } from "../contexts/tasks-context";
 import { TaskCard } from "./task-card";
 
 export const TaskList: React.FC = () => {
 	const { tasks } = useContext(TaskContext);
-	const [selectedTasks, setSelectedTasks] = useState<number[]>([]);
+	const [_selectedTasks, setSelectedTasks] = useState<number[]>([]);
 
-	useEffect(() => {
-		console.log("Selected tasks:", selectedTasks);
-	}, [selectedTasks]);
+	// useEffect(() => {
+	// 	console.log("Selected tasks:", selectedTasks);
+	// }, [selectedTasks]);
 
 	return (
 		<section>
@@ -19,13 +19,15 @@ export const TaskList: React.FC = () => {
 			)}
 			{tasks &&
 				tasks.length > 0 &&
-				tasks.map((task) => (
-					<TaskCard
-						key={task.id}
-						task={task}
-						setSelectedTasks={setSelectedTasks}
-					/>
-				))}
+				tasks
+					.sort((a, b) => b.id - a.id)
+					.map((task) => (
+						<TaskCard
+							key={task.id}
+							task={task}
+							setSelectedTasks={setSelectedTasks}
+						/>
+					))}
 		</section>
 	);
 };
