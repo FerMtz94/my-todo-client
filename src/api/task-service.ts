@@ -68,7 +68,7 @@ export class TaskService {
 
 	public async createUserTask(
 		task: Partial<Task>,
-	): Promise<{ task_id: number } | undefined> {
+	): Promise<{ id: number; error: string }> {
 		try {
 			const response = await fetch(
 				`${this.baseUrl}/users/${task.user_id}/tasks`,
@@ -85,8 +85,7 @@ export class TaskService {
 			}
 			return response.json();
 		} catch (error) {
-			console.error(error);
-			return undefined;
+			return { id: -1, error: (error as Error).message };
 		}
 	}
 
