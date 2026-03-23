@@ -3,6 +3,7 @@ import type { Task } from "../types/task";
 import "./task-styles.css";
 import { Icon } from "@chakra-ui/react/icon";
 import { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { TaskServiceInstance as taskService } from "@/api/task-service";
 import { dialog } from "@/components/dialog";
@@ -36,9 +37,10 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 				(prev) =>
 					prev?.filter((currentTask) => currentTask.id !== taskId) || null,
 			);
+			toast.success("Task deleted successfully.");
 			dialog.close("delete-dialog");
 		} else {
-			alert("Failed to delete task. Please try again.");
+			toast.error("Failed to delete task. Please try again.");
 		}
 	};
 
