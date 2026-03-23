@@ -37,6 +37,7 @@ export const Login: React.FC<{}> = () => {
 
 		if (foundUser) {
 			setCurrentUser(foundUser);
+			sessionStorage.setItem("current-user", JSON.stringify(foundUser));
 		} else {
 			setError("Invalid email or password. Please try again.");
 			emailRef.current?.focus();
