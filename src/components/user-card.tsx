@@ -12,9 +12,9 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
 
 	return (
 		<div className="user-card">
-			<p>User Name: {username}</p>
-			<p>Email: {email}</p>
-			<p>Password Hash: {password_hash}</p>
+			<p style={{ fontWeight: "bold" }}>{username}</p>
+			<p>{email}</p>
+			<p>{password_hash}</p>
 		</div>
 	);
 };
