@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { dialog } from "./components/dialog";
 import "./App.css";
 import { Toaster } from "react-hot-toast";
@@ -13,31 +13,35 @@ import type { User } from "./types/user";
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
 	const { setTasks } = useContext(TaskContext);
+	const currentStoredUserString = useRef(
+		sessionStorage.getItem("current-user"),
+	);
+
+	const getUserTodos = useCallback(
+		async (currentUser: User) => {
+			await setTasks(
+				(await taskService.getTasksByUserId(currentUser.id)) || [],
+			);
+		},
+		[setTasks],
+	);
 
 	useEffect(() => {
-		if (currentUser) {
-			document.title = `My Todos - ${currentUser.username}`;
-			const getTodos = async () => {
-				await setTasks(
-					(await taskService.getTasksByUserId(currentUser.id)) || [],
-				);
-			};
-			getTodos();
-		} else if (sessionStorage.getItem("current-user")) {
-			const sessionStoredCurrentUser = JSON.parse(
-				sessionStorage.getItem("current-user")!,
-			) as User;
+		if (currentStoredUserString.current) {
+			const sessionStoredCurrentUser: User = JSON.parse(
+				currentStoredUserString.current,
+			);
 			setCurrentUser(sessionStoredCurrentUser);
-			document.title = `My Todos - ${sessionStoredCurrentUser?.username}`;
-			const getTodos = async () => {
-				await setTasks(
-					(await taskService.getTasksByUserId(sessionStoredCurrentUser.id)) ||
-						[],
-				);
-			};
-			getTodos();
 		}
-	}, [currentUser, setTasks, setCurrentUser]);
+	}, [setCurrentUser]);
+
+	useEffect(() => {
+		if (!currentUser) {
+			return;
+		}
+		document.title = `My TO-DOs - ${currentUser.username}`;
+		getUserTodos(currentUser);
+	}, [currentUser, getUserTodos]);
 
 	const postTask = async (formData: FormData) => {
 		const formValues = Object.fromEntries(formData.entries());
