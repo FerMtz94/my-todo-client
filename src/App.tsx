@@ -12,16 +12,14 @@ import type { User } from "./types/user";
 
 const App = () => {
 	const { currentUser, setCurrentUser } = useContext(UserContext);
-	const { setTasks } = useContext(TaskContext);
+	const { tasks, setTasks } = useContext(TaskContext);
 	const currentStoredUserString = useRef(
 		sessionStorage.getItem("current-user"),
 	);
 
 	const getUserTodos = useCallback(
 		async (currentUser: User) => {
-			await setTasks(
-				(await taskService.getTasksByUserId(currentUser.id)) || [],
-			);
+			setTasks((await taskService.getTasksByUserId(currentUser.id)) || []);
 		},
 		[setTasks],
 	);
@@ -40,8 +38,21 @@ const App = () => {
 			return;
 		}
 		document.title = `My TO-DOs - ${currentUser.username}`;
-		getUserTodos(currentUser);
-	}, [currentUser, getUserTodos]);
+		const cachedTasksAsString = sessionStorage.getItem("tasks");
+		if (!cachedTasksAsString) {
+			getUserTodos(currentUser);
+		} else {
+			const cachedTasks: Task[] = JSON.parse(cachedTasksAsString);
+			setTasks(cachedTasks);
+		}
+	}, [currentUser, getUserTodos, setTasks]);
+
+	useEffect(() => {
+		if (!tasks || tasks.length === 0) {
+			return;
+		}
+		sessionStorage.setItem("tasks", JSON.stringify(tasks));
+	}, [tasks]);
 
 	const postTask = async (formData: FormData) => {
 		const formValues = Object.fromEntries(formData.entries());
@@ -96,7 +107,7 @@ const App = () => {
 	return (
 		<>
 			<Toaster position={"bottom-center"} />
-			{!currentUser && <Login />}
+			{!currentUser && !currentStoredUserString.current && <Login />}
 			{currentUser && (
 				<>
 					<div className="top-right">
@@ -105,14 +116,17 @@ const App = () => {
 							className="outline-button"
 							onClick={() => {
 								setCurrentUser(null);
+								setTasks([]);
+								currentStoredUserString.current = null;
 								sessionStorage.removeItem("current-user");
+								sessionStorage.removeItem("tasks");
 							}}
 						>
 							Logout
 						</button>
 					</div>
 					<div className="main-container">
-						<h1>{currentUser.username} Todo Items</h1>
+						<h1>{currentUser?.username} TO-DO Items</h1>
 						<button
 							id="add-task-button"
 							type="button"
