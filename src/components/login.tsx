@@ -78,7 +78,7 @@ export const Login: React.FC<{}> = () => {
 
 	return (
 		<div className="app-container">
-			<h1>My Todo App</h1>
+			<h1>Write your notes</h1>
 			<div className="form-container">
 				<form action={validateCredentials} onInput={removeErrorMsg}>
 					<input
