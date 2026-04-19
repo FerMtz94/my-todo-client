@@ -104,10 +104,13 @@ const App = () => {
 		});
 	};
 
+	if (!currentUser && !currentStoredUserString.current) {
+		return <Login />;
+	}
+
 	return (
 		<>
 			<Toaster position={"bottom-center"} />
-			{!currentUser && !currentStoredUserString.current && <Login />}
 			{currentUser && (
 				<>
 					<div className="top-right">
